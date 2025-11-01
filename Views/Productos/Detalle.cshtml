@@ -1,0 +1,14 @@
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Http.Extensions
+@model Producto
+@{
+  var idSolicitado = @Context.Request.Path.ToString().Split("/").Last(); // 
+}
+
+@if (Model != null){
+  <h1>@Model.IdProducto - @Model.Descripcion - @Model.Precio.ToString("C")</h1>
+  @* <h2>@Model.Imagen</h2> *@
+  <img src="@Model.Imagen" class="img-fluid"/>
+} else {
+  <h1>No se encontró producto con el id @idSolicitado</h1>
+}

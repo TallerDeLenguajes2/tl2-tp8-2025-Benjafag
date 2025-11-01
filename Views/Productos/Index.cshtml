@@ -1,0 +1,25 @@
+@model List<Producto>
+
+@{
+  ViewData[index: "title"] = "Productos";
+}
+
+<h1>@Model.Count Productos</h1>
+<section class="d-flex p-1 justify-content-center">
+  <table>
+    <tr>
+      <th>Id</th>    
+      <th>Descripcion</th>    
+      <th>Precio</th>    
+      <th>Detalles</th>    
+    </tr>
+    @foreach (Producto producto in Model) {
+      <tr>
+        <td>@producto.IdProducto</td>    
+        <td>@producto.Descripcion</td>    
+        <td>@producto.Precio.ToString("C")</td>    
+        <td><a asp-controller="Productos" asp-action="Detalle" asp-route-id="@producto.IdProducto" class="btn btn-dark">+</a></td>
+      </tr>
+    }
+  </table>
+</section>

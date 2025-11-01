@@ -1,0 +1,17 @@
+@model List<Presupuesto>
+@{
+  ViewData[index: "title"] = "Presupuestos";
+}
+<h1>@Model.Count Presupuestos</h1>
+
+<section class="d-flex p-1 justify-content-center">
+  <ul>
+    @foreach (Presupuesto presupuesto in Model) {  
+      <li class="pb-3">
+        @presupuesto.NombreDestinatario - 
+        @presupuesto.MontoPresupuestoIva().ToString("C")
+        <a asp-controller="Presupuestos" asp-action="Detalle" asp-route-id="@presupuesto.IdPresupuesto">Mas detalles</a>
+      </li>
+    }
+  </ul>
+</section>
