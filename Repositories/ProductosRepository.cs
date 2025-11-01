@@ -7,6 +7,7 @@ public class ProductoDTO
 {
   public string Descripcion { get; set; }
   public double Precio { get; set; }
+  public string Imagen{ get; set; }
 }
 
 public class ProductosRepository : IProductosRepository
@@ -25,7 +26,8 @@ public class ProductosRepository : IProductosRepository
       {
         IdProducto = Convert.ToInt32(reader["IdProducto"]),
         Descripcion = Convert.ToString(reader["Descripcion"]),
-        Precio = Convert.ToDouble(reader["Precio"])
+        Precio = Convert.ToDouble(reader["Precio"]),
+        Imagen = Convert.ToString(reader["Imagen"])
       };
     connection.Close();
     return null;
@@ -35,11 +37,13 @@ public class ProductosRepository : IProductosRepository
     SqliteConnection connection = new SqliteConnection(connectionString);
     connection.Open();
 
-    string insertQuery = "INSERT INTO producto (Descripcion, Precio) VALUES (@descripcion, @precio)";
+    string insertQuery = "INSERT INTO producto (Descripcion, Precio, Imagen) VALUES (@descripcion, @precio, @imagen)";
 
     using var insertCmd = new SqliteCommand(insertQuery, connection);
     insertCmd.Parameters.AddWithValue("@descripcion", producto.Descripcion);
     insertCmd.Parameters.AddWithValue("@precio", producto.Precio);
+    insertCmd.Parameters.AddWithValue("@imagen", string.IsNullOrEmpty(producto.Imagen)? DBNull.Value : producto.Imagen);
+
     int cantidad = insertCmd.ExecuteNonQuery();
     Console.WriteLine(cantidad);
     if (cantidad != 0) Console.WriteLine($"Producto {producto.Descripcion} creado exitosamente");
@@ -66,14 +70,15 @@ public class ProductosRepository : IProductosRepository
   {
     SqliteConnection connection = new SqliteConnection(connectionString);
     connection.Open();
-    string deleteQuery = "UPDATE producto SET Descripcion = @descripcion, Precio = @precio WHERE IdProducto = @id";
+    string updateQuery = "UPDATE producto SET Descripcion = @descripcion, Precio = @precio, Imagen = @imagen WHERE IdProducto = @id";
 
-    using SqliteCommand deleteCmd = new SqliteCommand(deleteQuery, connection);
-    deleteCmd.Parameters.AddWithValue("@descripcion", producto.Descripcion);
-    deleteCmd.Parameters.AddWithValue("@precio", producto.Precio);
-    deleteCmd.Parameters.AddWithValue("@id", id);
+    using SqliteCommand updateCmd = new SqliteCommand(updateQuery, connection);
+    updateCmd.Parameters.AddWithValue("@descripcion", producto.Descripcion);
+    updateCmd.Parameters.AddWithValue("@precio", producto.Precio);
+    updateCmd.Parameters.AddWithValue("@imagen", string.IsNullOrEmpty(producto.Imagen)? DBNull.Value : producto.Imagen);
+    updateCmd.Parameters.AddWithValue("@id", id);
 
-    int afectados = deleteCmd.ExecuteNonQuery();
+    int afectados = updateCmd.ExecuteNonQuery();
     return afectados != 0;
   }
 
@@ -116,7 +121,8 @@ public class ProductosRepository : IProductosRepository
       {
         IdProducto = Convert.ToInt32(reader["IdProducto"]),
         Descripcion = Convert.ToString(reader["Descripcion"]),
-        Precio = Convert.ToDouble(reader["Precio"])
+        Precio = Convert.ToDouble(reader["Precio"]),
+        Imagen = Convert.ToString(reader["Imagen"])
       });
 
     connection.Close();

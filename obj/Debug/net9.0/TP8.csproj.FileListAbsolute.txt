@@ -117,3 +117,4 @@ C:\Users\benja\Desktop\Taller2\TP8\obj\Debug\net9.0\refint\TP8.dll
 C:\Users\benja\Desktop\Taller2\TP8\obj\Debug\net9.0\TP8.pdb
 C:\Users\benja\Desktop\Taller2\TP8\obj\Debug\net9.0\TP8.genruntimeconfig.cache
 C:\Users\benja\Desktop\Taller2\TP8\obj\Debug\net9.0\ref\TP8.dll
+C:\Users\benja\Desktop\Taller2\TP8\obj\Debug\net9.0\TP8.sourcelink.json

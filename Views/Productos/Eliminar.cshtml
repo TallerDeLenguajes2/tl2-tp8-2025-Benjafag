@@ -1,0 +1,17 @@
+@{
+  var idSolicitado = Convert.ToInt32(@Context.Request.Path.ToString().Split("/").Last()); // 
+  ProductosRepository repository = new();
+
+  Producto producto = repository.ObtenerPorId(idSolicitado);
+}
+
+@if (producto != null){
+  <h1>@producto.IdProducto - @producto.Descripcion - @producto.Precio.ToString("C")</h1>
+  <img src="@producto.Imagen" class="img-fluid"/>
+  <form asp-controller="Productos" asp-action="EliminarProducto" asp-route-id="@idSolicitado">
+    <button type="submit" class="btn btn-danger">Eliminar</button>
+  </form>
+  <a asp-controller="Productos" asp-action="Index" >Volver </a>
+} else {
+  <h1>No se encontró producto con el id @idSolicitado</h1>
+}
