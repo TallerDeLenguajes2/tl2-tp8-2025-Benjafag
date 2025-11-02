@@ -1,0 +1,29 @@
+@model Presupuesto
+
+@{string titulo;}
+
+@if (Model != null) {
+  <h1>
+    @Model.NombreDestinatario
+    @Model.MontoPresupuesto().ToString("C") (@Model.MontoPresupuestoIva().ToString("C") con IVA)
+  </h1>
+  <ol>
+    @foreach(PresupuestoDetalle p in Model.Detalles){
+      <li>
+      @{double precioFinal = p.Producto.Precio * p.Cantidad;}
+      @p.Producto.Descripcion x @p.Cantidad (@precioFinal.ToString("C"))
+      </li> 
+    }
+  </ol>
+  <form asp-controller="Presupuestos" asp-action="EliminarPresupuesto">
+    <input type="hidden" name="id" value="@Model.IdPresupuesto">
+    <input type="submit" class="btn btn-danger" value="Eliminar">
+  </form>
+  titulo = $"Presupuesto {Model.IdPresupuesto}";
+} else {
+  <h1>No se encontro presupuesto con el id @Context.Request.Path.ToString().Split("/").Last()</h1>
+  titulo = $"Presupuesto no encontrado";
+}
+@{
+  ViewData[index: "title"] = titulo;
+}

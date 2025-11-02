@@ -21,4 +21,17 @@ public class PresupuestosController : Controller
     Presupuesto insertado = repository.UltimoInsertado();
     return RedirectToAction("Detalle", new { id = insertado.IdPresupuesto }); // importante!
   }
+
+  // Modificar
+
+
+  // Eliminar
+  [HttpGet]
+  public IActionResult Eliminar(int id) => View(repository.ObtenerPresupuestoPorId(id));
+  [HttpPost]
+  public IActionResult EliminarPresupuesto(int id)
+  {
+    repository.EliminarPresupuesto(id);
+    return RedirectToAction("Index");
+  }
 }
