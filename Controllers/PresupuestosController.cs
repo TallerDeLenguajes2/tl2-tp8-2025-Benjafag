@@ -23,7 +23,15 @@ public class PresupuestosController : Controller
   }
 
   // Modificar
-
+  [HttpGet]
+  public IActionResult Modificar(int id) => View(repository.ObtenerPresupuestoPorId(id));
+  // [HttpPost]
+  public IActionResult ModificarPresupuesto(Presupuesto p)
+  {
+    p.Detalles = p.Detalles.FindAll(d => d.Cantidad != 0);
+    repository.ModificarPresupuesto(p);
+    return RedirectToAction("Index"); 
+  }
 
   // Eliminar
   [HttpGet]

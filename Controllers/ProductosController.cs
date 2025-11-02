@@ -34,6 +34,6 @@ public class ProductosController : Controller
   public IActionResult EliminarProducto(int id)
   {
     repository.EliminarPorId(id);
-    return View("Index", repository.ObtenerTodosLosProductos());
+    return RedirectToAction("Index");
   }
 }

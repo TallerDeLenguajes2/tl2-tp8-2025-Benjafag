@@ -1,9 +1,11 @@
 
+using Microsoft.AspNetCore.SignalR.Protocol;
 using Microsoft.Data.Sqlite;
 
 public class PresupuestosRepository : IPresupuestosRepository
 {
   private static readonly string connectionString = "Data Source = tienda.db;";
+  
   public Presupuesto UltimoInsertado()
   {
     SqliteConnection connection = new SqliteConnection(connectionString);
@@ -52,13 +54,12 @@ public class PresupuestosRepository : IPresupuestosRepository
     connection.Close();
     return resultado;
   }
+
   public bool AgregarProducto(int idPresupuesto, int idProducto, int cantidad)
   {
     try {
       SqliteConnection connection = new SqliteConnection(connectionString);
       connection.Open();
-
-      
 
       string insertQuery = "INSERT INTO PresupuestoDetalle (IdPresupuesto,IdProducto,Cantidad) VALUES (@idpres,@idprod,@cantidad)";
       using SqliteCommand insertCmd = new SqliteCommand(insertQuery, connection);
@@ -171,5 +172,62 @@ public class PresupuestosRepository : IPresupuestosRepository
 
     connection.Close();
     return resultado;
+  }
+  public bool ModificarPresupuesto(Presupuesto presupuesto)
+  {
+    using SqliteConnection connection = new SqliteConnection(connectionString);
+    connection.Open();
+
+    string updateQuery = "UPDATE presupuesto SET NombreDestinatario = @nombre WHERE IdPresupuesto = @id";
+
+    using SqliteCommand updateCmd = new SqliteCommand(updateQuery, connection);
+    updateCmd.Parameters.AddWithValue("@nombre", presupuesto.NombreDestinatario);
+    updateCmd.Parameters.AddWithValue("@id", presupuesto.IdPresupuesto);
+
+    List<PresupuestoDetalle> detallesAnteriores = ObtenerDetalles(presupuesto.IdPresupuesto);
+
+    foreach (var detalle in presupuesto.Detalles)
+      if (!detallesAnteriores.Exists(d => d.Producto.IdProducto == detalle.Producto.IdProducto)) // hay un nuevo detalle
+        AgregarProducto(presupuesto.IdPresupuesto, detalle.Producto.IdProducto, detalle.Cantidad);
+      else if (detalle.Cantidad != detallesAnteriores.Find(d => d.Producto.IdProducto == detalle.Producto.IdProducto)?.Cantidad) // Si la cantidad del detalle nuevo difiere con la del antiguo actualiza
+        ModificarProducto(presupuesto.IdPresupuesto, detalle.Producto.IdProducto, detalle.Cantidad);
+
+    foreach (var detalle in detallesAnteriores)
+      if (!presupuesto.Detalles.Exists(d => detalle.Producto.IdProducto == d.Producto.IdProducto)) // Si antes existia un detalle que ahora no
+        EliminarProducto(presupuesto.IdPresupuesto, detalle.Producto.IdProducto);
+
+    int afectados = updateCmd.ExecuteNonQuery();
+    connection.Close();
+    return afectados != 0;
+  }
+  public bool ModificarProducto(int idPresupuesto, int idProducto, int cantidad)
+  {
+    SqliteConnection connection = new SqliteConnection(connectionString);
+    connection.Open();
+    string updateQuery = "UPDATE PresupuestoDetalle SET Cantidad = @cantidad WHERE IdPresupuesto = @idPres AND IdProducto = @idProd";
+
+    using SqliteCommand updateCmd = new SqliteCommand(updateQuery, connection);
+    updateCmd.Parameters.AddWithValue("@cantidad", cantidad);
+    updateCmd.Parameters.AddWithValue("@idPres", idPresupuesto);
+    updateCmd.Parameters.AddWithValue("@idProd", idProducto);
+
+    int afectados = updateCmd.ExecuteNonQuery();
+    connection.Close();
+    return afectados != 0;
+  }
+  public bool EliminarProducto(int idPresupuesto, int idProducto)
+  {
+    using SqliteConnection connection = new SqliteConnection(connectionString);
+    connection.Open();
+
+    string deleteQuery = "DELETE FROM PresupuestoDetalle WHERE IdPresupuesto = @idPres AND IdProducto = @idProd";
+
+    using SqliteCommand deleteCmd = new SqliteCommand(deleteQuery, connection);
+    deleteCmd.Parameters.AddWithValue("@idPres", idPresupuesto);
+    deleteCmd.Parameters.AddWithValue("@idProd", idProducto);
+    
+    int afectados = deleteCmd.ExecuteNonQuery();
+    connection.Close();
+    return afectados != 0;
   }
 }

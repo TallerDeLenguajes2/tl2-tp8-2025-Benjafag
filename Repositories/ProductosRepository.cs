@@ -79,6 +79,7 @@ public class ProductosRepository : IProductosRepository
     updateCmd.Parameters.AddWithValue("@id", id);
 
     int afectados = updateCmd.ExecuteNonQuery();
+    connection.Close();
     return afectados != 0;
   }
 

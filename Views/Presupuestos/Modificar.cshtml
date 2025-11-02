@@ -1,0 +1,28 @@
+@model Presupuesto
+@{
+  ProductosRepository repository = new ProductosRepository();
+  List<Producto> productos = repository.ObtenerTodosLosProductos();
+  foreach(Producto p in productos){
+    if (!Model.Detalles.Exists(d => d.Producto.IdProducto == p.IdProducto))
+    Model.Detalles.Add(new PresupuestoDetalle{Producto = p, Cantidad = 0});
+  }
+}
+<form asp-controller="Presupuestos" asp-action="ModificarPresupuesto">
+    <div class="mb-3">
+    <input type="hidden" asp-for="IdPresupuesto" value="@Model.IdPresupuesto">
+    <label asp-for="NombreDestinatario" class="form-label">Nombre Destinatario</label>
+    <input asp-for="NombreDestinatario" value="@Model.NombreDestinatario" class="form-control" required />
+  </div>
+  <input type="hidden" value="@Model.FechaCreacion" asp-for="FechaCreacion">
+  <ul>
+  @for(int i = 0; i < Model.Detalles.Count; i++){
+    <li class="pb-2">
+      @Model.Detalles[i].Producto.Descripcion - @Model.Detalles[i].Producto.Precio 
+      <input type="number" asp-for="Detalles[i].Cantidad" min="0">
+      <input type="hidden" asp-for="Detalles[i].Producto.IdProducto">
+    </li>  
+  }
+  </ul>
+
+  <button type="submit" class="btn btn-warning">Modificar</button>
+</form>
