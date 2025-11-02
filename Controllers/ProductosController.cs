@@ -30,10 +30,7 @@ public class ProductosController : Controller
 
   // Eliminar
   [HttpGet]
-  public IActionResult Eliminar(int id)
-  {
-    return View();
-  }
+  public IActionResult Eliminar(int id) => View();
   public IActionResult EliminarProducto(int id)
   {
     repository.EliminarPorId(id);

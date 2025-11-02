@@ -2,16 +2,33 @@
 @{
   ViewData[index: "title"] = "Presupuestos";
 }
+<h2><a asp-controller="Presupuestos" asp-action="Crear">Crear presupuesto</a></h2>
 <h1>@Model.Count Presupuestos</h1>
 
 <section class="d-flex p-1 justify-content-center">
-  <ul>
+  <table>
+    <tr>
+      <th>Id</th>    
+      <th>Destinatario</th>    
+      <th>Monto</th>    
+      <th>Detalles</th>    
+      <th>Modificar</th>    
+      <th>Eliminar</th>    
+    </tr>
     @foreach (Presupuesto presupuesto in Model) {  
-      <li class="pb-3">
-        @presupuesto.NombreDestinatario - 
-        @presupuesto.MontoPresupuestoIva().ToString("C")
-        <a asp-controller="Presupuestos" asp-action="Detalle" asp-route-id="@presupuesto.IdPresupuesto">Mas detalles</a>
-      </li>
+    <tr>
+      <td>@presupuesto.IdPresupuesto</td>
+      <td>@presupuesto.NombreDestinatario</td>
+      <td>@presupuesto.MontoPresupuestoIva().ToString("C")</td>
+      <td>
+        <a asp-controller="Presupuestos" asp-action="Detalle" asp-route-id="@presupuesto.IdPresupuesto" class="btn btn-dark">+</a>
+      </td>
+      <td>
+        <a asp-controller="Presupuestos" asp-action="Modificar" asp-route-id="@presupuesto.IdPresupuesto" class="btn btn-warning">+</a>
+      </td>
+      <td>
+        <a asp-controller="Presupuestos" asp-action="Eliminar" asp-route-id="@presupuesto.IdPresupuesto" class="btn btn-danger">+</a>
+      </td>
+    </tr>
     }
-  </ul>
 </section>

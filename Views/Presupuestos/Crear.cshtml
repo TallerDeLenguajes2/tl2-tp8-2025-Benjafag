@@ -1,0 +1,23 @@
+@model Presupuesto
+@{
+  ProductosRepository repository = new ProductosRepository();
+  List<Producto> productos = repository.ObtenerTodosLosProductos();
+}
+<form asp-controller="Presupuestos" asp-action="CrearPresupuesto">
+    <div class="mb-3">
+    <label asp-for="NombreDestinatario" class="form-label">Nombre Destinatario</label>
+    <input asp-for="NombreDestinatario" class="form-control" required />
+  </div>
+  <input type="hidden" value="@DateTime.Now" asp-for="FechaCreacion">
+  <ul>
+  @for(int i = 0; i < productos.Count; i++){
+    <li class="pb-2">
+      @productos[i].Descripcion - @productos[i].Precio 
+      <input type="hidden" asp-for="Detalles[i].Producto.IdProducto" value="@productos[i].IdProducto">
+      <input asp-for="Detalles[i].Cantidad">
+    </li>  
+  }
+  </ul>
+
+  <button type="submit" class="btn btn-primary">Crear</button>
+</form>

@@ -17,7 +17,8 @@ public class PresupuestosRepository : IPresupuestosRepository
       {
         IdPresupuesto = Convert.ToInt32(reader["IdPresupuesto"]),
         NombreDestinatario = Convert.ToString(reader["NombreDestinatario"]),
-        FechaCreacion = Convert.ToDateTime(reader["FechaCreacion"])
+        FechaCreacion = Convert.ToDateTime(reader["FechaCreacion"]),
+        Detalles = ObtenerDetalles(Convert.ToInt32(reader["IdPresupuesto"]))
       };
     connection.Close();
     return null;
@@ -85,14 +86,12 @@ public class PresupuestosRepository : IPresupuestosRepository
     insertCmd.Parameters.AddWithValue("@fecha", presupuesto.FechaCreacion.ToString("yyyy-MM-dd"));
     bool creado = insertCmd.ExecuteNonQuery() != 0;
 
-    if (creado)
-    {
+    if (creado) {
       Presupuesto insertado = UltimoInsertado();
       foreach (PresupuestoDetalle detalle in presupuesto.Detalles)
         AgregarProducto(insertado.IdPresupuesto, detalle.Producto.IdProducto, detalle.Cantidad);
       return true;
     }
-
     return false;
   }
 
