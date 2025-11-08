@@ -7,7 +7,19 @@ public class ProductoDTO
 {
   public string Descripcion { get; set; }
   public double Precio { get; set; }
-  public string Imagen{ get; set; }
+  public string Imagen { get; set; }
+  public ProductoDTO(ProductoViewModel p)
+  {
+    Descripcion = p.Descripcion ?? "";
+    Precio = p.Precio;
+    Imagen = p.UrlImagen ?? "";
+  }  
+  public ProductoDTO(Producto p)
+  {
+    Descripcion = p.Descripcion ?? "";
+    Precio = p.Precio;
+    Imagen = p.Imagen ?? "";
+  }
 }
 
 public class ProductosRepository : IProductosRepository
@@ -40,9 +52,9 @@ public class ProductosRepository : IProductosRepository
     string insertQuery = "INSERT INTO producto (Descripcion, Precio, Imagen) VALUES (@descripcion, @precio, @imagen)";
 
     using var insertCmd = new SqliteCommand(insertQuery, connection);
-    insertCmd.Parameters.AddWithValue("@descripcion", producto.Descripcion);
+    insertCmd.Parameters.AddWithValue("@descripcion", string.IsNullOrEmpty(producto?.Descripcion)? DBNull.Value : producto.Descripcion);
     insertCmd.Parameters.AddWithValue("@precio", producto.Precio);
-    insertCmd.Parameters.AddWithValue("@imagen", string.IsNullOrEmpty(producto.Imagen)? DBNull.Value : producto.Imagen);
+    insertCmd.Parameters.AddWithValue("@imagen", string.IsNullOrEmpty(producto?.Imagen)? DBNull.Value : producto.Imagen);
 
     int cantidad = insertCmd.ExecuteNonQuery();
     Console.WriteLine(cantidad);

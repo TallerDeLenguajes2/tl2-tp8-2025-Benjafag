@@ -1,17 +1,54 @@
+@model ProductoViewModel
+
 @{
-  var idSolicitado = Convert.ToInt32(@Context.Request.Path.ToString().Split("/").Last()); // 
-  ProductosRepository repository = new();
-
-  Producto producto = repository.ObtenerPorId(idSolicitado);
+  ViewData["Title"] = "Eliminar producto";
+  string urlImagen = 
+    string.IsNullOrEmpty(Model?.UrlImagen) 
+      ? Url.Content("~/img/producto-sin-imagen.png")
+      : Model.UrlImagen;
 }
 
-@if (producto != null){
-  <h1>@producto.IdProducto - @producto.Descripcion - @producto.Precio.ToString("C")</h1>
-  <img src="@producto.Imagen" class="img-fluid"/>
-  <form asp-controller="Productos" asp-action="EliminarProducto" asp-route-id="@idSolicitado">
-    <button type="submit" class="btn btn-danger">Eliminar</button>
-  </form>
-  <a asp-controller="Productos" asp-action="Index" >Volver </a>
-} else {
-  <h1>No se encontró producto con el id @idSolicitado</h1>
-}
+<div class="container py-4">
+  @if (Model != null)
+  {
+    <div class="d-flex align-items-center justify-content-between mb-4">
+      <h1 class="h4 m-0">¿Eliminar producto?</h1>
+      <a class="btn btn-secondary" href="javascript:history.back()">Volver</a>
+    </div>
+
+    <div class="card shadow-sm">
+      <div class="row g-0">
+        <div class="col-md-4">
+          <div class="ratio ratio-1x1">
+            <img src="@urlImagen" class="card-img-top object-fit-contain p-3" />
+          </div>
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 class="card-title">@Model.Descripcion</h5>
+            <p class="card-text">
+              <strong>Precio:</strong> @Model.Precio.ToString("C")
+            </p>
+
+            <div class="alert alert-warning">
+              Esta acción es permanente. ¿Deseás continuar?
+            </div>
+
+            <form asp-controller="Productos" asp-action="Eliminar" method="post">
+              <button type="submit" class="btn btn-danger">Eliminar definitivamente</button>
+              <a class="btn btn-outline-secondary ms-2" asp-action="Index">Cancelar</a>
+              <input type="hidden" asp-for="IdProducto" value="@Model.IdProducto">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+  else
+  {
+    <div class="alert alert-warning">
+      No se encontró producto.
+    </div>
+    <a class="btn btn-secondary" asp-action="Index">Volver al listado</a>
+  }
+</div>

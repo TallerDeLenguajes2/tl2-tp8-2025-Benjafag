@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\benja\\Desktop\\Taller2\\TP8\\TP8.csproj": {}
+    "C:\\Users\\benja\\Desktop\\Taller2\\TP9\\TP8.csproj": {}
   },
   "projects": {
-    "C:\\Users\\benja\\Desktop\\Taller2\\TP8\\TP8.csproj": {
+    "C:\\Users\\benja\\Desktop\\Taller2\\TP9\\TP8.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\benja\\Desktop\\Taller2\\TP8\\TP8.csproj",
+        "projectUniqueName": "C:\\Users\\benja\\Desktop\\Taller2\\TP9\\TP8.csproj",
         "projectName": "TP8",
-        "projectPath": "C:\\Users\\benja\\Desktop\\Taller2\\TP8\\TP8.csproj",
+        "projectPath": "C:\\Users\\benja\\Desktop\\Taller2\\TP9\\TP8.csproj",
         "packagesPath": "C:\\Users\\benja\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\benja\\Desktop\\Taller2\\TP8\\obj\\",
+        "outputPath": "C:\\Users\\benja\\Desktop\\Taller2\\TP9\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\benja\\AppData\\Roaming\\NuGet\\NuGet.Config"

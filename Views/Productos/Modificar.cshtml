@@ -1,30 +1,58 @@
+@model ProductoViewModel
+@{
+  ViewData["Title"] = "Modificar Producto";
+}
 
-@model Producto
-@if (Model != null) {
+<div class="container py-4">
 
-  <h2>Modificar Producto</h2>
-
-  <form asp-controller="Productos" asp-action="ModificarProducto" method="post" class="mt-3">
-    <div class="mb-3">
-      <label asp-for="Descripcion" class="form-label"></label>
-      <input asp-for="Descripcion" class="form-control" required />
-    </div>
-    <input asp-for="IdProducto" type="hidden" value="@Model.IdProducto">
-    <div class="mb-3">
-      <label asp-for="Precio" class="form-label"></label>
-      <input type="number" asp-for="Precio" class="form-control" step="0.01" min="0" required />
+  @if (Model != null)
+  {
+    <div class="d-flex align-items-center justify-content-between mb-3">
+      <h1 class="h4 m-0">Modificar producto</h1>
+      <a class="btn btn-secondary" href="javascript:history.back()">← Volver</a>
     </div>
 
-    <div class="mb-3">
-      <label asp-for="Imagen" class="form-label"></label>
-      <input asp-for="Imagen" class="form-control" />
-      <span class="form-text">URL de la imagen (opcional)</span>
+    <div class="card shadow-sm">
+      <div class="card-body">
+
+        <form asp-controller="Productos" asp-action="Modificar" method="post" class="mt-2">
+
+          <input asp-for="IdProducto" type="hidden" />
+
+          <div class="mb-3">
+            <label asp-for="Descripcion" class="form-label"></label>
+            <input asp-for="Descripcion" class="form-control" />
+            <span asp-validation-for="Descripcion" class="text-danger"></span>
+          </div>
+
+          <div class="mb-3">
+            <label asp-for="Precio" class="form-label"></label>
+            <input asp-for="Precio" type="number" class="form-control" step="0.01" min="0.01" required />
+            <span asp-validation-for="Precio" class="text-danger"></span>
+          </div>
+
+          <div class="mb-3">
+            <label asp-for="UrlImagen" class="form-label"></label>
+            <input asp-for="UrlImagen" class="form-control" />
+            <span asp-validation-for="UrlImagen" class="text-danger"></span>
+          </div>
+
+          <button type="submit" class="btn btn-warning">Guardar cambios</button>
+          <a asp-action="Detalle" asp-route-id="@Model.IdProducto" class="btn btn-outline-secondary ms-2">Cancelar</a>
+        </form>
+
+      </div>
     </div>
+  }
+  else
+  {
+    <div class="alert alert-warning my-3">
+      No se encontró producto.
+    </div>
+    <a class="btn btn-secondary" asp-action="Index">Volver al listado</a>
+  }
+</div>
 
-    <button type="submit" class="btn btn-warning">Modificar</button>
-  </form>
-
-
-} else {
-  <h2>No se encontro producto con el id solicitado</h2>
+@section Scripts {
+  <partial name="_ValidationScriptsPartial" />
 }
