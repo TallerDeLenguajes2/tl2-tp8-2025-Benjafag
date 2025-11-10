@@ -2,15 +2,40 @@ using System.ComponentModel.DataAnnotations;
 
 public class PresupuestoViewModel
 {
-  [Display(Description = "Nombre del destinatario")]
+  public PresupuestoViewModel()  {  }
+
+  public PresupuestoViewModel(Presupuesto p)
+  {
+    if (p != null)
+    {
+      IdPresupuesto = p.IdPresupuesto;
+      Monto = p.MontoPresupuesto();
+      MontoIva = p.MontoPresupuestoIva();
+      NombreDestinatario = p.NombreDestinatario;
+      FechaCreacion = p.FechaCreacion;
+      Detalles = p.Detalles;
+    }
+  }
+  public Presupuesto ToPresupuesto()
+  {
+    return new Presupuesto
+    {
+      Detalles = this.Detalles,
+      FechaCreacion = this.FechaCreacion,
+      IdPresupuesto = this.IdPresupuesto,
+      NombreDestinatario = this.NombreDestinatario
+    };
+  }
+  public int IdPresupuesto { get; set; }
+  public double Monto { get; set; }
+  public List<PresupuestoDetalle> Detalles { get; set; }
+  public double MontoIva { get; set; }
+  
+  [Display(Name = "Nombre del destinatario")]
   [Required(ErrorMessage = "El campo nombre es obligatorio")]
   public string NombreDestinatario { get; set; }
 
-  [Display(Description = "Email (Opcional)")]
-  [EmailAddress(ErrorMessage = "El campo debe tener un formato de email")]
-  public string Email { get; set; }
-
-  [Display(Description = "Fecha de creacion")]
+  [Display(Name = "Fecha de creacion")]
   [Required(ErrorMessage = "El campo fecha de creacion es obligatorio")]
   [FechaMenor]
   public DateTime FechaCreacion { get; set; }

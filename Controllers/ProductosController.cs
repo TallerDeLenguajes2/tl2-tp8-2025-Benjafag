@@ -30,7 +30,7 @@ public class ProductosController : Controller
   
   [HttpPost]
   public IActionResult Modificar(ProductoViewModel p) {
-    if (!ModelState.IsValid) return View(p.IdProducto);
+    if (!ModelState.IsValid) return View(p);
 
     ProductoDTO dto = new ProductoDTO(p);
     bool modificado = repository.ModificarProducto(p.IdProducto, dto);

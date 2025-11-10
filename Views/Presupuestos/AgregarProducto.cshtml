@@ -1,0 +1,25 @@
+@model AgregarProductoViewModel
+
+<h1>
+  @Model.IdPresupuesto
+</h1>
+<form method="post" asp-action="AgregarProducto">
+  <label asp-for="IdProducto"></label>
+  <select asp-for="IdProducto" asp-items="@Model.ListaProductos" id="">
+    <option value="0">-- Seleccionar Producto --</option>
+  </select>
+  <span asp-validation-for="IdProducto"></span>
+
+  <label asp-for="Cantidad"></label>
+
+  <input asp-for="Cantidad" type="number"  step="1">
+  <input asp-for="IdPresupuesto" value="@Model.IdPresupuesto" type="hidden">
+  <span asp-validation-for="IdProducto"></span>
+
+  <input type="submit" class="btn btn-primary" value="Agregar">
+</form>
+<a class="btn btn-danger" asp-action="Detalle" asp-route-id="@Model.IdPresupuesto" >Volver</a>
+
+@section Scripts {
+  <partial name="_ValidationScriptsPartial" />
+}

@@ -87,13 +87,7 @@ public class PresupuestosRepository : IPresupuestosRepository
     insertCmd.Parameters.AddWithValue("@fecha", presupuesto.FechaCreacion.ToString("yyyy-MM-dd"));
     bool creado = insertCmd.ExecuteNonQuery() != 0;
 
-    if (creado) {
-      Presupuesto insertado = UltimoInsertado();
-      foreach (PresupuestoDetalle detalle in presupuesto.Detalles)
-        AgregarProducto(insertado.IdPresupuesto, detalle.Producto.IdProducto, detalle.Cantidad);
-      return true;
-    }
-    return false;
+    return creado;
   }
 
   public bool EliminarPresupuesto(int id)
@@ -112,7 +106,7 @@ public class PresupuestosRepository : IPresupuestosRepository
     int eliminadosDetalle = deleteDetalleCmd.ExecuteNonQuery();
     int eliminados = deleteCmd.ExecuteNonQuery();
     
-    Console.WriteLine(eliminadosDetalle);
+    Console.WriteLine(new { CantidadEliminados = eliminados });
     return eliminados != 0 ;
   }
 
