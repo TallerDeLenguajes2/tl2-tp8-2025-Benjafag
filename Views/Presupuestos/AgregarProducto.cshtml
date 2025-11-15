@@ -1,25 +1,46 @@
 @model AgregarProductoViewModel
 
-<h1>
-  @Model.IdPresupuesto
-</h1>
-<form method="post" asp-action="AgregarProducto">
-  <label asp-for="IdProducto"></label>
-  <select asp-for="IdProducto" asp-items="@Model.ListaProductos" id="">
-    <option value="0">-- Seleccionar Producto --</option>
-  </select>
-  <span asp-validation-for="IdProducto"></span>
+<div class="container py-4">
 
-  <label asp-for="Cantidad"></label>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h4 m-0">Presupuesto #@Model.IdPresupuesto</h1>
+        <a class="btn btn-outline-secondary" asp-action="Detalle" asp-route-id="@Model.IdPresupuesto">
+            ← Volver
+        </a>
+    </div>
 
-  <input asp-for="Cantidad" type="number"  step="1">
-  <input asp-for="IdPresupuesto" value="@Model.IdPresupuesto" type="hidden">
-  <span asp-validation-for="IdProducto"></span>
+    <div class="card shadow-sm">
+        <div class="card-body">
 
-  <input type="submit" class="btn btn-primary" value="Agregar">
-</form>
-<a class="btn btn-danger" asp-action="Detalle" asp-route-id="@Model.IdPresupuesto" >Volver</a>
+            <form method="post" asp-action="AgregarProducto">
+
+                <div class="mb-3">
+                    <label asp-for="IdProducto" class="form-label"></label>
+                    <select asp-for="IdProducto" asp-items="@Model.ListaProductos" class="form-select">
+                        <option value="0">-- Seleccionar Producto --</option>
+                    </select>
+                    <span class="text-danger small" asp-validation-for="IdProducto"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Cantidad" class="form-label"></label>
+                    <input asp-for="Cantidad" type="number" step="1" class="form-control" />
+                    <span class="text-danger small" asp-validation-for="Cantidad"></span>
+                </div>
+
+                <input asp-for="IdPresupuesto" value="@Model.IdPresupuesto" type="hidden" />
+
+                <div class="d-grid mt-3">
+                    <input type="submit" class="btn btn-primary" value="Agregar" />
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
 
 @section Scripts {
-  <partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial" />
 }

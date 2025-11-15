@@ -1,27 +1,43 @@
-@model LoginViewModel;
+@model LoginViewModel
 
 @{
-  ViewData[index: "Title"] = "Iniciar Sesion";
-} 
+    ViewData["Title"] = "Iniciar Sesión";
+}
 
-<form method="post" asp-action="Login" class="form">
-  <div>
-    <label class="form-label" asp-for="Usuario"></label>
-    <input class="form-control" asp-for="Usuario" type="text">
-    <span class="text-danger" asp-validation-for="Usuario"></span>
-  </div>
-  <div>
-    <label class="form-label" asp-for="Contrasena"></label>
-    <input class="form-control" asp-for="Contrasena" type="password">
-    <span class="text-danger" asp-validation-for="Contrasena"></span>
-  </div>
-  <div>
-    <span class="text-danger">@Model?.ErrorMessage</span>
-  </div>
-  <input class="btn btn-primary mt-3" type="submit" value="Iniciar Sesion">
-</form>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h1 class="h4 mb-4 text-center">Iniciar Sesión</h1>
 
+                    <form method="post" asp-action="Login" class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label class="form-label" asp-for="Usuario"></label>
+                            <input class="form-control" asp-for="Usuario" type="text" />
+                            <span class="text-danger small" asp-validation-for="Usuario"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" asp-for="Contrasena"></label>
+                            <input class="form-control" asp-for="Contrasena" type="password" />
+                            <span class="text-danger small" asp-validation-for="Contrasena"></span>
+                        </div>
+
+                        <div class="text-danger text-center mb-3">
+                            @Model?.ErrorMessage
+                        </div>
+
+                        <div class="d-grid">
+                            <input class="btn btn-primary" type="submit" value="Iniciar Sesión" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
-  <partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial" />
 }

@@ -1,5 +1,8 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+@{
+  string Username = Context.Session.GetString(key: "Username");
+}
 
 <head>
   <meta charset="utf-8" />
@@ -23,7 +26,7 @@
         <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
           <ul class="navbar-nav flex-grow-1">
             <li class="nav-item">
-              <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+              <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
             </li>
             <li class="nav-item">
               <a class="nav-link text-dark" asp-area="" asp-controller="Productos" asp-action="Index">Productos</a>
@@ -31,20 +34,22 @@
             <li class="nav-item">
               <a class="nav-link text-dark" asp-area="" asp-controller="Presupuestos" asp-action="Index">Presupuestos</a>
             </li>
+            @if (Username != null){
+            <li class="nav-item">
+              <a class="nav-link text-dark " asp-area="" asp-controller="Login" asp-action="Logout">Cerrar Sesion</a>
+            </li>
+            <li class="nav-item" style="margin-left:auto">
+              <span class="nav-link text-primary">@Context.Session.GetString("Username")</span>
+            </li>
+            } else {
             <li class="nav-item">
               <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="Index">Iniciar Sesion</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="Logout">Cerrar Sesion</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-            </li>
+            }
           </ul>
         </div>
       </div>
-      <div>
-      <span class="m-5 text-danger">@Context.Session.GetString("Username")</span></div>
+
     </nav>
   </header>
   <div class="container">
