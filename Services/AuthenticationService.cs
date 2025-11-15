@@ -10,6 +10,8 @@ public class AuthenticationService : IAuthenticationService
 
   public bool EstaAutenticado()
   {
+    if (_contextAccessor.HttpContext == null)
+      return false;
     return _contextAccessor.HttpContext.Session.GetString("IsAuthenticated") == "true";
   }
 
@@ -22,7 +24,7 @@ public class AuthenticationService : IAuthenticationService
       {
         context.Session.SetString("IsAuthenticated", "true"); 
         context.Session.SetString("User", user.NombreUsuario); 
-        context.Session.SetString("UserNombre", user.Nombre); 
+        context.Session.SetString("Username", user.Nombre); 
         context.Session.SetString("Rol", user.Rol); 
         return true;
       }
@@ -31,14 +33,16 @@ public class AuthenticationService : IAuthenticationService
 
   public void Logout()
   {
+    if (_contextAccessor.HttpContext == null)
+      return;
     if (EstaAutenticado())
-    {
       _contextAccessor.HttpContext.Session.Clear();
-    }
   }
 
   public bool TieneNivelAcceso(string nivelAcceso)
   {
+    if (_contextAccessor.HttpContext == null)
+      return false;
     return _contextAccessor.HttpContext.Session.GetString("Rol")?.ToLower() == nivelAcceso.ToLower();
   }
 }

@@ -2,8 +2,8 @@
 @model List<Producto>
 
 @{
-  ViewData["Title"] = "Productos";
-  var count = Model?.Count ?? 0;
+  ViewData[index: "Title"] = "Productos";
+  int count = Model?.Count ?? 0;
 }
 
 <div class="container py-4">
@@ -37,7 +37,7 @@
           {
             <tr>
               <td><span class="badge text-bg-secondary">@producto.IdProducto</span></td>
-              <td>@producto.Descripcion</td>
+              <td class="text-break">@producto.Descripcion</td>
               <td class="text-end">@producto.Precio.ToString("C")</td>
               <td class="text-center">
                 <div class="btn-group" role="group" aria-label="Acciones">

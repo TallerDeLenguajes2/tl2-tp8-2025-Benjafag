@@ -5,7 +5,7 @@ using TP8.Models;
 
 public class LoginController : Controller
 {
-  private IAuthenticationService _authenticationService;
+  private readonly IAuthenticationService _authenticationService;
   public LoginController(IAuthenticationService authenticationService)
   {
     _authenticationService = authenticationService;
@@ -20,12 +20,16 @@ public class LoginController : Controller
   [HttpPost]
   public IActionResult Login(LoginViewModel vm)
   {
-    if(!ModelState.IsValid)
+    if (!ModelState.IsValid)
       RedirectToAction("Index");
 
     bool ingreso = _authenticationService.Login(vm.Usuario, vm.Contrasena);
-    Console.WriteLine(new {vm.Usuario, vm.Contrasena});
-    return ingreso ? RedirectToAction("Index") : Redirect("Error");
+
+    if (ingreso)
+      return RedirectToAction("Index","Home");
+    
+    vm.ErrorMessage =  "Credenciales invalidas";
+    return View("Index", vm);
   }
 
   [HttpGet]
@@ -33,11 +37,5 @@ public class LoginController : Controller
   {
     _authenticationService.Logout();
     return RedirectToAction("Index");
-  }
-
-  [HttpGet]
-  public IActionResult Error()
-  {
-    return View(new ErrorViewModel{RequestId = "asd"});
   }
 }
