@@ -1,0 +1,25 @@
+@model LoginViewModel;
+
+@{
+  
+  ViewData["Title"] = "Iniciar Sesion";
+
+}
+
+<form method="post" asp-action="Login" class="form">
+  <div>
+    <label class="form-label" asp-for="Usuario"></label>
+    <input class="form-control" asp-for="Usuario" type="text">
+    <span class="text-danger" asp-validation-for="Usuario"></span>
+  </div>
+  <div>
+    <label class="form-label" asp-for="Contrasena"></label>
+    <input class="form-control" asp-for="Contrasena" type="password">
+    <span class="text-danger" asp-validation-for="Contrasena"></span>
+  </div>
+  <input class="btn btn-primary mt-3" type="submit" value="Iniciar Sesion">
+</form>
+
+@section Scripts {
+  <partial name="_ValidationScriptsPartial" />
+}

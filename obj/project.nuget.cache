@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "sEpaNERhCaY=",
+  "dgSpecHash": "sGVRN1gjqgw=",
   "success": true,
-  "projectFilePath": "C:\\Users\\benja\\Desktop\\Taller2\\TP9\\TP8.csproj",
+  "projectFilePath": "C:\\Users\\benja\\Desktop\\Taller2\\TP10\\TP8.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\benja\\.nuget\\packages\\microsoft.data.sqlite\\9.0.10\\microsoft.data.sqlite.9.0.10.nupkg.sha512",
     "C:\\Users\\benja\\.nuget\\packages\\microsoft.data.sqlite.core\\9.0.10\\microsoft.data.sqlite.core.9.0.10.nupkg.sha512",
