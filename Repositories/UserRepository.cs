@@ -2,7 +2,7 @@ using Microsoft.Data.Sqlite;
 
 public class UserRepository : IUserRepository
 {
-  private static readonly string connectionString = "Data Source = ../tienda.db;";
+  private static readonly string connectionString = "Data Source = tienda.db;";
   public Usuario GetUser(string usuario, string contrasena)
   {
     SqliteConnection connection = new SqliteConnection(connectionString);
