@@ -1,7 +1,7 @@
 public class AuthenticationService : IAuthenticationService
 {
-  private IUserRepository _userRepository;
-  private IHttpContextAccessor _contextAccessor;
+  private readonly IUserRepository _userRepository;
+  private readonly IHttpContextAccessor _contextAccessor;
   public AuthenticationService(IUserRepository userRepository, IHttpContextAccessor contextAccessor)
   {
     _userRepository = userRepository;
