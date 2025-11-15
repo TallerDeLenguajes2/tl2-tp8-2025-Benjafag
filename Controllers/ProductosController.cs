@@ -53,4 +53,8 @@ public class ProductosController : Controller
     _repository.EliminarPorId(p.IdProducto);
     return RedirectToAction("Index");
   }
+
+  // ---------------------------------------- ACCESO DENEGADO -----------------------------------------
+  [HttpGet]
+  public IActionResult AccesoDenegado() => View();
 }

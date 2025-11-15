@@ -94,6 +94,7 @@ public class PresupuestosController : Controller
     _repository.AgregarProducto(vm.IdPresupuesto, vm.IdProducto, vm.Cantidad);
     return View("Detalle", new PresupuestoViewModel(_repository.ObtenerPresupuestoPorId(vm.IdPresupuesto)));
   }
+
   // ---------------------------------------- ELIMINAR PRODUCTO ----------------------------------------
   [HttpPost]
   public IActionResult EliminarProducto(int IdProducto, int IdPresupuesto)
@@ -101,4 +102,8 @@ public class PresupuestosController : Controller
     _repository.EliminarProducto(IdPresupuesto, IdProducto);
     return View("Detalle", new PresupuestoViewModel(_repository.ObtenerPresupuestoPorId(IdPresupuesto)));
   }
+
+  // ---------------------------------------- ACCESO DENEGADO -----------------------------------------
+  [HttpGet]
+  public IActionResult AccesoDenegado() => View();
 }
