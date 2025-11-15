@@ -31,11 +31,14 @@ public class AuthenticationService : IAuthenticationService
 
   public void Logout()
   {
-    throw new NotImplementedException();
+    if (EstaAutenticado())
+    {
+      _contextAccessor.HttpContext.Session.Clear();
+    }
   }
 
   public bool TieneNivelAcceso(string nivelAcceso)
   {
-    throw new NotImplementedException();
+    return _contextAccessor.HttpContext.Session.GetString("Rol")?.ToLower() == nivelAcceso.ToLower();
   }
 }
