@@ -2,15 +2,18 @@ using Microsoft.AspNetCore.Mvc;
 
 public class ProductosController : Controller
 {
-  private static readonly ProductosRepository repository = new ProductosRepository();
-  public ProductosController() { }
+  private IProductosRepository _repository;
+  public ProductosController(IProductosRepository repository)
+  {
+    _repository = repository;
+  }
 
   // ---------------------------------------- LISTAR ----------------------------------------
   [HttpGet]
-  public IActionResult Index() => View(repository.ObtenerTodosLosProductos());
+  public IActionResult Index() => View(_repository.ObtenerTodosLosProductos());
   
   [HttpGet]
-  public IActionResult Detalle(int id) => View(new ProductoViewModel(repository.ObtenerPorId(id)));
+  public IActionResult Detalle(int id) => View(new ProductoViewModel(_repository.ObtenerPorId(id)));
 
   // ---------------------------------------- CREAR ----------------------------------------
   [HttpGet]
@@ -20,34 +23,34 @@ public class ProductosController : Controller
   public IActionResult Crear(ProductoViewModel p) {
     if (!ModelState.IsValid) return View(p);
 
-    return View("Detalle", new ProductoViewModel(repository.CrearProducto(new ProductoDTO(p))));
+    return View("Detalle", new ProductoViewModel(_repository.CrearProducto(new ProductoDTO(p))));
   }
 
   // ---------------------------------------- MODIFICAR ----------------------------------------
   [HttpGet]
   public IActionResult Modificar(int id)
-    => View(new ProductoViewModel(repository.ObtenerPorId(id)));
+    => View(new ProductoViewModel(_repository.ObtenerPorId(id)));
   
   [HttpPost]
   public IActionResult Modificar(ProductoViewModel p) {
     if (!ModelState.IsValid) return View(p);
 
     ProductoDTO dto = new ProductoDTO(p);
-    bool modificado = repository.ModificarProducto(p.IdProducto, dto);
+    bool modificado = _repository.ModificarProducto(p.IdProducto, dto);
     return modificado 
-      ? View("Detalle", new ProductoViewModel(repository.ObtenerPorId(p.IdProducto))) 
-      : View("Index", repository.ObtenerTodosLosProductos());
+      ? View("Detalle", new ProductoViewModel(_repository.ObtenerPorId(p.IdProducto))) 
+      : View("Index", _repository.ObtenerTodosLosProductos());
   }
 
   // ---------------------------------------- ELIMINAR ----------------------------------------
   [HttpGet]
   public IActionResult Eliminar(int id)
-    => View(new ProductoViewModel(repository.ObtenerPorId(id)));
+    => View(new ProductoViewModel(_repository.ObtenerPorId(id)));
     
   [HttpPost, ActionName("Eliminar")]
   public IActionResult EliminarProducto(ProductoViewModel p)
   {
-    repository.EliminarPorId(p.IdProducto);
+    _repository.EliminarPorId(p.IdProducto);
     return RedirectToAction("Index");
   }
 }

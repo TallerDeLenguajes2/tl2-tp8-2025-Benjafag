@@ -1,9 +1,27 @@
+using Microsoft.AspNetCore.Authentication;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddSession(options =>
+{
+  options.IdleTimeout = TimeSpan.FromMinutes(30);
+  options.Cookie.HttpOnly = true;
+  options.Cookie.IsEssential =  true;
+});
+
+builder.Services.AddScoped<IProductosRepository,ProductosRepository>();
+builder.Services.AddScoped<IPresupuestosRepository,PresupuestosRepository>();
+builder.Services.AddScoped<IUserRepository,UserRepository>();
+builder.Services.AddScoped<IAuthenticationService,AuthenticationService>();
 
 var app = builder.Build();
+
+app.UseRouting();
+app.UseSession();
+app.UseAuthorization();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

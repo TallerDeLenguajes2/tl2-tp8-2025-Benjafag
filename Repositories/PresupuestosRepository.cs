@@ -4,7 +4,7 @@ using Microsoft.Data.Sqlite;
 
 public class PresupuestosRepository : IPresupuestosRepository
 {
-  private static readonly string connectionString = "Data Source = tienda.db;";
+  private static readonly string connectionString = "Data Source = ../tienda.db;";
   
   public Presupuesto UltimoInsertado()
   {

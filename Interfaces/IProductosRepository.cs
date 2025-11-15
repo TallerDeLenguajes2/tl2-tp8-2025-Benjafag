@@ -5,4 +5,6 @@ public interface IProductosRepository
   List<Producto> ObtenerTodosLosProductos();
   Producto ObtenerPorId(int id);
   Producto EliminarPorId(int id);
+  public Producto UltimoInsertado();
+
 }

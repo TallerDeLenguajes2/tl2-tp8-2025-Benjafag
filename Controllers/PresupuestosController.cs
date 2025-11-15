@@ -5,22 +5,28 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 public class PresupuestosController : Controller
 {
-  private static readonly PresupuestosRepository repository = new PresupuestosRepository();
-  private static readonly ProductosRepository repositoryProductos = new ProductosRepository();
+  private IPresupuestosRepository _repository;
+  private IProductosRepository _repositoryProductos ;
+
+  public PresupuestosController(IPresupuestosRepository presupuestos, IProductosRepository productos)
+  {
+    _repository = presupuestos;
+    _repositoryProductos = productos;
+  }
 
 
   // ---------------------------------------- LISTAR ----------------------------------------
   [HttpGet]
   public IActionResult Index()
   {
-    var presupuestos = repository.ObtenerPresupuestos().Select(p => new PresupuestoViewModel(p)).ToList();
+    var presupuestos = _repository.ObtenerPresupuestos().Select(p => new PresupuestoViewModel(p)).ToList();
     return View(presupuestos);
   }
 
   [HttpGet]
   public IActionResult Detalle(int id)
   {
-    Presupuesto p = repository.ObtenerPresupuestoPorId(id);
+    Presupuesto p = _repository.ObtenerPresupuestoPorId(id);
     return p != null ? View(new PresupuestoViewModel(p)) : View(null);
   }
 
@@ -32,28 +38,28 @@ public class PresupuestosController : Controller
   public IActionResult CrearPresupuesto(PresupuestoViewModel p)
   {
     Console.WriteLine(new { Fecha= p.FechaCreacion, Nombre = p.NombreDestinatario });
-    repository.CrearPresupuesto(p.ToPresupuesto());
-    Presupuesto insertado = repository.UltimoInsertado();
+    _repository.CrearPresupuesto(p.ToPresupuesto());
+    Presupuesto insertado = _repository.UltimoInsertado();
     return View("Detalle", new PresupuestoViewModel(insertado)); // importante!
   }
 
   // ---------------------------------------- MODIFICAR ----------------------------------------
   [HttpGet]
   public IActionResult Modificar(int id) 
-    => View(new PresupuestoViewModel(repository.ObtenerPresupuestoPorId(id)));
+    => View(new PresupuestoViewModel(_repository.ObtenerPresupuestoPorId(id)));
   
   [HttpPost]
   public IActionResult Modificar(PresupuestoViewModel p)
   {
     p.Detalles = p.Detalles.FindAll(d => d.Cantidad != 0);
-    repository.ModificarPresupuesto(p.ToPresupuesto());
+    _repository.ModificarPresupuesto(p.ToPresupuesto());
     return RedirectToAction("Index"); 
   }
 
   // ---------------------------------------- ELIMINAR ----------------------------------------
   [HttpGet]
   public IActionResult Eliminar(int id) {
-    Presupuesto p = repository.ObtenerPresupuestoPorId(id);
+    Presupuesto p = _repository.ObtenerPresupuestoPorId(id);
     return p != null ? View(new PresupuestoViewModel(p)) : View(null);
   }
 
@@ -61,7 +67,7 @@ public class PresupuestosController : Controller
   public IActionResult Eliminar(PresupuestoViewModel p)
   {
     System.Console.WriteLine(new {id = p.IdPresupuesto});
-    repository.EliminarPresupuesto(p.IdPresupuesto);
+    _repository.EliminarPresupuesto(p.IdPresupuesto);
     return RedirectToAction("Index");
   }
 
@@ -69,7 +75,7 @@ public class PresupuestosController : Controller
   [HttpGet]
   public IActionResult AgregarProducto(int id)
   {
-    List<Producto> productos = repositoryProductos.ObtenerTodosLosProductos();
+    List<Producto> productos = _repositoryProductos.ObtenerTodosLosProductos();
     AgregarProductoViewModel viewModel = new AgregarProductoViewModel
     {
       IdPresupuesto = id,
@@ -85,15 +91,14 @@ public class PresupuestosController : Controller
     if (!ModelState.IsValid)
       return RedirectToAction("AgregarProducto", new { id = vm.IdPresupuesto });
     
-    repository.AgregarProducto(vm.IdPresupuesto, vm.IdProducto, vm.Cantidad);
-    return View("Detalle", new PresupuestoViewModel(repository.ObtenerPresupuestoPorId(vm.IdPresupuesto)));
+    _repository.AgregarProducto(vm.IdPresupuesto, vm.IdProducto, vm.Cantidad);
+    return View("Detalle", new PresupuestoViewModel(_repository.ObtenerPresupuestoPorId(vm.IdPresupuesto)));
   }
   // ---------------------------------------- ELIMINAR PRODUCTO ----------------------------------------
   [HttpPost]
   public IActionResult EliminarProducto(int IdProducto, int IdPresupuesto)
   {
-    System.Console.WriteLine("ENTRE");
-    repository.EliminarProducto(IdPresupuesto, IdProducto);
-    return View("Detalle", new PresupuestoViewModel(repository.ObtenerPresupuestoPorId(IdPresupuesto)));
+    _repository.EliminarProducto(IdPresupuesto, IdProducto);
+    return View("Detalle", new PresupuestoViewModel(_repository.ObtenerPresupuestoPorId(IdPresupuesto)));
   }
 }
